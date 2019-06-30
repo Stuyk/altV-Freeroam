@@ -61,10 +61,6 @@ alt.on('playerDeath', (target, killer, weapon) => {
         target.spawn(randomPosition.x, randomPosition.y, randomPosition.z);
         target.health = 200;
         target.fadeScreen(false, 2000);
-        target.dimension = 1;
-        setTimeout(() => {
-            target.dimension = 0;
-        }, 1000);
     }, 4000);
 });
 
