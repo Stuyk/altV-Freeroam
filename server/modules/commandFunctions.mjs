@@ -12,7 +12,7 @@ import * as alt from 'alt';
 export function giveWeapon(player, arg) {
     const weaponName = arg[0].toLowerCase();
     
-    if (weaponList[weaponName] === undefined)
+    if (!weaponList[weaponName])
         return player.sendMessage(`{FF0000}Weapon type is not valid.`);
 
     player.showNotification("CHAR_AMMUNATION", "/wep", `You've recieved ~y~${weaponName}~w~.`, "");
@@ -34,7 +34,7 @@ export function clearWeapons(player) {
  * @param arg 
  */
 export function spawnVehicle(player, arg) {
-    if (arg[0] === undefined)
+    if (!arg[0])
         return player.sendMessage(`{FF0000}Vehicle type is not valid.`);
 
     if (!player.personalVehicle)
@@ -115,12 +115,12 @@ export function setSkin(player, arg) {
  * @param arg [playerName]
  */
 export function teleportToPlayer(player, arg) {
-    if (arg[0] === undefined)
+    if (!arg[0])
         return player.sendMessage(`{FF0000}/tpto [playername]`);
 
     const target = alt.getPlayersByName(arg[0]);
 
-    if (target === undefined || target[0] === undefined)
+    if (!target || !target[0])
         return player.sendMessage(`{FF0000}Player does not exist.`);
 
     if (Array.isArray(target) && target.length >= 2)
@@ -212,7 +212,7 @@ export function inviteDimension(player, arg) {
     if (player.dimension <= 0)
         return player.sendMessage(`{FF0000}Cannot invite to dimension 0.`)
 
-    if (player.currentDimension === undefined) {
+    if (!player.currentDimension) {
         player.sendMessage(`{FF0000}/dimension [number]`);
         return;
     }
@@ -240,7 +240,7 @@ export function inviteDimension(player, arg) {
  * @param player 
  */
 export function joinDimension(player) {
-    if (player.lastInvite === undefined)
+    if (!player.lastInvite)
         return player.sendMessage(`{FF0000}No dimension is available to join.`);
         
 
