@@ -1,5 +1,3 @@
-import * as alt from 'alt';
-import * as extended from 'server-extended'; //https://github.com/team-stuyk-alt-v/altV-Extended
 import * as chat from 'chat'; //https://github.com/team-stuyk-alt-v/altV-Chat-Extended
 import * as cmdFuncs from './commandFunctions.mjs';
 

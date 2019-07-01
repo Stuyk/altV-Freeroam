@@ -15,6 +15,6 @@ alt.on('playerDeath', eventFuncs.respawnPlayer);
 
 // Called when the player kill themself.
 alt.onClient('killSelf', (player) => {
-    player.health = 0;
+	player.health = 0;
 });
 

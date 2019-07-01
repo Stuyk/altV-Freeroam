@@ -8,72 +8,72 @@ const spawnLocation = {x: -1136.07, y: -3044.18, z: 14.1};
 var disconnectedPlayers = new Map();
 
 export function playerFirstJoin(player) {
-    // Prevent reconnections to the server to some degree.
-    if (disconnectedPlayers.get(player.name) !== undefined) {
-        extended.SetupExportsForPlayer(player);
-        player.fadeScreen(true, 5000);
-        player.freeze(true);
-        disconnectedPlayers.set(player.name, Date.now() + 120000);
-        chat.send(player, `{FF0000} You recently disconnected. Please close your game and rejoin.`);
-        setTimeout(() => {
-            player.kick();
-        }, 15000);
-        return;
-    }
+	// Prevent reconnections to the server to some degree.
+	if (disconnectedPlayers.get(player.name) !== undefined) {
+		extended.SetupExportsForPlayer(player);
+		player.fadeScreen(true, 5000);
+		player.freeze(true);
+		disconnectedPlayers.set(player.name, Date.now() + 120000);
+		chat.send(player, '{FF0000} You recently disconnected. Please close your game and rejoin.');
+		setTimeout(() => {
+			player.kick();
+		}, 15000);
+		return;
+	}
 
-    alt.emit('broadcastMessage', `{FFF000}${player.name}{FFFFFF} has joined the server.`);
-    utility.loadModelForPlayers(player);
+	alt.emit('broadcastMessage', `{FFF000}${player.name}{FFFFFF} has joined the server.`);
+	utility.loadModelForPlayers(player);
 
-    SpawnPlayer(player); 
+	SpawnPlayer(player); 
 }
 
 export function playerDisconnect(player) {
-    // Remove from dimension if they're in one.
-    if (player.currentDimension !== undefined) {
-        player.currentDimension.Remove(player);
-    }
+	// Remove from dimension if they're in one.
+	if (player.currentDimension !== undefined) {
+		player.currentDimension.Remove(player);
+	}
 
-    // Disconnect the player for 25 seconds.
-    disconnectedPlayers.set(player.name, Date.now() + 120000);
+	// Disconnect the player for 25 seconds.
+	disconnectedPlayers.set(player.name, Date.now() + 120000);
 }
 
 export function checkDisconnects() {
-    disconnectedPlayers.forEach((time, name) => {
-        if (Date.now() < time)
-            return;
+	disconnectedPlayers.forEach((time, name) => {
+		if (Date.now() < time)
+			return;
 
-        disconnectedPlayers.delete(name);
-        console.log(`===> ${name} is free to rejoin.`);
-    });
+		disconnectedPlayers.delete(name);
+		console.log(`===> ${name} is free to rejoin.`);
+	});
 }
 
-export function respawnPlayer(target, killer, weapon) {
-    target.showSubtitle("~r~You have died; you will be respawned shortly.", 5000);
-    var randomPosition = extended.RandomPosAround(spawnLocation, 50);
+export function respawnPlayer(target) {
+	target.showSubtitle('~r~You have died; you will be respawned shortly.', 5000);
+	var randomPosition = extended.RandomPosAround(spawnLocation, 50);
     
-    var skin = target.model;
-    target.fadeScreen(true, 3000);
+	var skin = target.model;
+	target.fadeScreen(true, 3000);
     
-    setTimeout(() => {
-        target.model = skin;
-        target.spawn(randomPosition.x, randomPosition.y, randomPosition.z);
-        target.health = 200;
-        target.fadeScreen(false, 2000);
-    }, 4000);
+	setTimeout(() => {
+		target.model = skin;
+		target.spawn(randomPosition.x, randomPosition.y, randomPosition.z);
+		target.health = 200;
+		target.fadeScreen(false, 2000);
+	}, 4000);
 }
 
 function SpawnPlayer(player) {
-    var randomPosition = extended.RandomPosAround(spawnLocation, 30);
-    var randomModel = Math.floor(Math.random() * skinList.length);
-    player.model = alt.hash(skinList[randomModel]);
+	var randomPosition = extended.RandomPosAround(spawnLocation, 30);
+	var randomModel = Math.floor(Math.random() * skinList.length);
+	player.model = alt.hash(skinList[randomModel]);
     
-    // Wait to set player health.
-    setTimeout(() => {
-        player.pos = randomPosition;
-        player.health = 200;
-    }, 1000);
+	// Wait to set player health.
+	setTimeout(() => {
+		player.pos = randomPosition;
+		player.health = 200;
+	}, 1000);
     
-    // Setup for extended / chat
-    chat.setupPlayer(player);
-    extended.SetupExportsForPlayer(player);
+	// Setup for extended / chat
+	chat.setupPlayer(player);
+	extended.SetupExportsForPlayer(player);
 }
