@@ -11,11 +11,9 @@ import * as utility from './utility.mjs';
  */
 export function giveWeapon(player, arg) {
 	const weaponName = arg[0].toLowerCase();
-
-	if (weaponList[weaponName] === undefined) {
-		player.sendMessage('{FF0000}Weapon type is not valid.');
-		return;
-	}
+    
+	if (!weaponList[weaponName])
+		return player.sendMessage('{FF0000}Weapon type is not valid.');
 
 	player.showNotification('CHAR_AMMUNATION', '/wep', `You've recieved ~y~${weaponName}~w~.`, '');
 	player.giveWeapon(weaponList[weaponName], 999, true);
@@ -36,29 +34,20 @@ export function clearWeapons(player) {
  * @param arg
  */
 export function spawnVehicle(player, arg) {
-	if (arg[0] === undefined) {
-		player.sendMessage('{FF0000}Vehicle type is not valid.');
-		return;
-	}
+	if (!arg[0])
+		return player.sendMessage('{FF0000}Vehicle type is not valid.');
 
-	if (player.personalVehicle !== undefined) { player.personalVehicle.destroy(); }
-
+	if (!player.personalVehicle)
+		player.personalVehicle.destroy();
+    
 	const positionNear = extended.RandomPosAround(player.pos, 10);
 
 	try {
-		player.personalVehicle = new alt.Vehicle(
-			arg[0],
-			positionNear.x,
-			positionNear.y,
-			positionNear.z,
-			0,
-			0,
-			0,
-		);
+		player.personalVehicle = new alt.Vehicle(arg[0], positionNear.x, positionNear.y, positionNear.z, 0, 0, 0);
 		player.personalVehicle.dimension = player.dimension;
 		alt.emitClient(player, 'warpIntoVehicle', player.personalVehicle);
 		player.showSubtitle('~g~You have spawned a vehicle.', 3000);
-	} catch (err) {
+	} catch(err) {
 		player.personalVehicle = undefined;
 		player.sendMessage('{FF0000}Vehicle type is not valid.');
 	}
@@ -70,15 +59,11 @@ export function spawnVehicle(player, arg) {
  * @param arg [r, g, b]
  */
 export function setVehicleColor1(player, arg) {
-	if (player.vehicle === undefined) {
-		player.sendMessage('{FF0000}You are not in a vehicle.');
-		return;
-	}
+	if (!player.vehicle)
+		return player.sendMessage('{FF0000}You are not in a vehicle.');
 
-	if (arg.length <= 2 && arg.length >= 4) {
-		player.sendMessage('{FF0000}/vehcolor1 [r] [g] [b]');
-		return;
-	}
+	if (arg.length !== 3)
+		return player.sendMessage('{FF0000}/vehcolor1 [r] [g] [b]');
 
 	player.vehicle.customPrimaryColor = { r: arg[0], g: arg[1], b: arg[2] };
 }
@@ -89,15 +74,11 @@ export function setVehicleColor1(player, arg) {
  * @param arg [r, g, b]
  */
 export function setVehicleColor2(player, arg) {
-	if (player.vehicle === undefined) {
-		player.sendMessage('{FF0000}You are not in a vehicle.');
-		return;
-	}
+	if (!player.vehicle)
+		return player.sendMessage('{FF0000}You are not in a vehicle.');
 
-	if (arg.length <= 2 && arg.length >= 4) {
-		player.sendMessage('{FF0000}/vehcolor1 [r] [g] [b]');
-		return;
-	}
+	if (arg.length !== 3)
+		return player.sendMessage('{FF0000}/vehcolor1 [r] [g] [b]');
 
 	player.vehicle.customSecondaryColor = { r: arg[0], g: arg[1], b: arg[2] };
 }
@@ -116,16 +97,14 @@ export function getPos(player) {
  * @param arg
  */
 export function setSkin(player, arg) {
-	if (arg[0] === undefined) {
-		player.sendMessage('{FF0000}Skin type is not valid.');
-		return;
-	}
+	if (!arg[0])
+		return player.sendMessage('{FF0000}Skin type is not valid.');
 
 	try {
 		player.model = arg[0];
 		utility.loadModelForPlayers(player);
 		player.showSubtitle('~g~You have changed your skin.', 5000);
-	} catch (err) {
+	} catch(err) {
 		player.showSubtitle('~r~Incorrect model name.', 5000);
 	}
 }
@@ -136,27 +115,19 @@ export function setSkin(player, arg) {
  * @param arg [playerName]
  */
 export function teleportToPlayer(player, arg) {
-	if (arg[0] === undefined) {
-		player.sendMessage('{FF0000}/tpto [playername]');
-		return;
-	}
+	if (!arg[0])
+		return player.sendMessage('{FF0000}/tpto [playername]');
 
 	const target = alt.getPlayersByName(arg[0]);
 
-	if (target === undefined || target[0] === undefined) {
-		player.sendMessage('{FF0000}Player does not exist.');
-		return;
-	}
+	if (!target || !target[0])
+		return player.sendMessage('{FF0000}Player does not exist.');
 
-	if (Array.isArray(target) && target.length >= 2) {
-		player.sendMessage('{FF0000}Too many players found; be more specific.');
-		return;
-	}
+	if (Array.isArray(target) && target.length >= 2)
+		return player.sendMessage('{FF0000}Too many players found; be more specific.');
 
-	if (target[0].dimension !== player.dimension) {
-		player.sendMessage('{FF0000}You are not in the same dimension.');
-		return;
-	}
+	if (target[0].dimension !== player.dimension)
+		return player.sendMessage('{FF0000}You are not in the same dimension.');
 
 	player.pos = target[0].pos;
 }
@@ -167,15 +138,12 @@ export function teleportToPlayer(player, arg) {
  * @param arg [x, y, z]
  */
 export function teleportToCoordinates(player, arg) {
-	if (arg[0] === undefined) {
-		player.sendMessage('{FF0000}/tp [x] [y] [z]');
-		return;
-	}
+	if (!arg[0])
+		return player.sendMessage('{FF0000}/tp [x] [y] [z]');
 
-	if (arg.length >= 4 || arg.length <= 2) {
-		player.sendMessage('{FF0000}/tp [x] [y] [z]');
-		return;
-	}
+	if (arg.length !== 3)
+		return player.sendMessage('{FF0000}/tp [x] [y] [z]');
+
 	player.pos = { x: arg[0], y: arg[1], z: arg[2] };
 }
 
@@ -193,10 +161,8 @@ export function killSelf(player) {
  * @param arg [dimensionID]
  */
 export function setDimension(player, arg) {
-	if (arg[0] === undefined) {
-		player.sendMessage('{FF0000}/dimension [number]');
-		return;
-	}
+	if (!arg[0])
+		return player.sendMessage('{FF0000}/dimension [number]');
 
 	// Get players current dimension.
 	// Check if they are the leader; kick all players from dimension if they are.
@@ -214,20 +180,19 @@ export function setDimension(player, arg) {
 	}
 
 	// If current dimension is 0.
-	if (parseInt(arg[0]) === 0) { return; }
-
-	const playersInCurrentDimension = alt.Player.all.find(x => x.dimension === parseInt(arg[0]));
-
-	if (playersInCurrentDimension !== undefined) {
-		player.sendMessage('{FF0000} That dimension is currently in use.');
+	if (parseInt(arg[0]) === 0)
 		return;
-	}
+
+	let playersInCurrentDimension = alt.Player.all.find(x => x.dimension === parseInt(arg[0]));
+
+	if (playersInCurrentDimension !== undefined)
+		return player.sendMessage('{FF0000} That dimension is currently in use.');
 
 	// Create a new dimension and set the player as the party leader.
 	// Also set the player into that dimension.
-	const dimension = new Dimension(player, arg[0]);
+	let dimension = new Dimension(player, arg[0]);
 	CurrentDimensions.set(`${arg[0]}`, dimension);
-	player.currentDimension = dimension;
+	player.currentDimension = dimension; 
 	player.dimension = arg[0];
 	player.showSubtitle(`You have joined dimension: ${arg[0]}`, 3000);
 }
@@ -238,40 +203,31 @@ export function setDimension(player, arg) {
  * @param arg
  */
 export function inviteDimension(player, arg) {
-	if (arg[0] === undefined) {
-		player.sendMessage('{FF0000}/invite [playername]');
-		return;
-	}
+	if (!arg[0])
+		return player.sendMessage('{FF0000}/invite [playername]');
 
-	if (arg[0].length <= 2) {
-		player.sendMessage('{FF0000}Please specify at least 3 characters for a username.');
-		return;
-	}
+	if (arg[0].length <= 2)
+		return player.sendMessage('{FF0000}Please specify at least 3 characters for a username.');
 
-	if (player.dimension <= 0) {
-		player.sendMessage('{FF0000}Cannot invite to dimension 0.');
-		return;
-	}
+	if (player.dimension <= 0)
+		return player.sendMessage('{FF0000}Cannot invite to dimension 0.');
 
-	if (player.currentDimension === undefined) {
+	if (!player.currentDimension) {
 		player.sendMessage('{FF0000}/dimension [number]');
 		return;
 	}
 
-	if (player.currentDimension.leader !== player) {
-		player.sendMessage('{FF0000}You are not the dimension leader.');
-		return;
-	}
+	if (player.currentDimension.leader !== player)
+		return player.sendMessage('{FF0000}You are not the dimension leader.');
 
 	const players = alt.getPlayersByName(arg[0]);
 
-	if (players === undefined) {
-		player.sendMessage('{FF0000}No users were found.');
-		return;
-	}
+	if (!players)
+		return player.sendMessage('{FF0000}No users were found.');
 
 	for (let i = 0; i < players.length; i++) {
-		if (players[i] === player) { continue; }
+		if (players[i] === player)
+			continue;
 
 		players[i].lastInvite = `${player.dimension}`;
 		players[i].sendMessage(`{00FF00}You recieved an invite for dimension ${player.dimension} from ${player.name}`);
@@ -284,17 +240,15 @@ export function inviteDimension(player, arg) {
  * @param player
  */
 export function joinDimension(player) {
-	if (player.lastInvite === undefined) {
-		player.sendMessage('{FF0000}No dimension is available to join.');
-		return;
-	}
+	if (!player.lastInvite)
+		return player.sendMessage('{FF0000}No dimension is available to join.');
+        
 
 	const currentDimension = CurrentDimensions.get(player.lastInvite);
 
-	if (currentDimension === undefined) {
+	if (!currentDimension) {
 		player.lastInvite = undefined;
-		player.sendMessage('{FF0000}The dimension invite has expired.');
-		return;
+		return player.sendMessage('{FF0000}The dimension invite has expired.');
 	}
 
 	currentDimension.Join(player);
@@ -307,20 +261,14 @@ export function joinDimension(player) {
  * @param arg
  */
 export function kickFromDimension(player, arg) {
-	if (arg[0] === undefined) {
-		player.sendMessage('{FF0000}/invite [playername]');
-		return;
-	}
+	if (!arg[0])
+		return player.sendMessage('{FF0000}/invite [playername]');
 
-	if (player.currentDimension === undefined) {
-		player.sendMessage('{FF0000}/dimension [number]');
-		return;
-	}
+	if (!player.currentDimension) 
+		return player.sendMessage('{FF0000}/dimension [number]');
 
-	if (player.currentDimension.leader !== player) {
-		player.sendMessage('{FF0000}You are not the dimension leader.');
-		return;
-	}
+	if (player.currentDimension.leader !== player)
+		return player.sendMessage('{FF0000}You are not the dimension leader.');
 
 	player.currentDimension.Kick(arg[0]);
 }

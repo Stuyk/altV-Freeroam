@@ -1,5 +1,5 @@
 import * as alt from 'alt';
-export var CurrentDimensions = new Map();
+export const CurrentDimensions = new Map();
 
 export class Dimension {
 	constructor(leader, dimensionID) {
@@ -21,9 +21,9 @@ export class Dimension {
 	}
 
 	Remove(player) {
-		var result = this.players.findIndex(player);
+		const result = this.players.findIndex(player);
 
-		if (result === undefined || result <= -1)
+		if (!result || result <= -1)
 			return;
 
 		this.players.splice(result, 1);
@@ -50,17 +50,13 @@ export class Dimension {
 	}
 
 	Kick(playerName) {
-		if (this.players.length <= 1) {
-			this.leader.sendMessage('{FF0000}Failed to kick player from dimension.');
-			return;
-		}
+		if (this.players.length <= 1)
+			return this.leader.sendMessage('{FF0000}Failed to kick player from dimension.');
 
-		var player = this.players.find(x => x.name === playerName);
+		const player = this.players.find(x => x.name === playerName);
 
-		if (player === undefined) {
-			this.leader.sendMessage('{FF0000}Failed to kick player from dimension.');
-			return;
-		}
+		if (!player)
+			return this.leader.sendMessage('{FF0000}Failed to kick player from dimension.');
 
 		player.dimension = 0;
 		player.sendMessage('{FFF000}You were kicked from the dimension. Wtf did you do?');

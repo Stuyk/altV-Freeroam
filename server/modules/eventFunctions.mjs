@@ -9,7 +9,7 @@ var disconnectedPlayers = new Map();
 
 export function playerFirstJoin(player) {
 	// Prevent reconnections to the server to some degree.
-	if (disconnectedPlayers.get(player.name) !== undefined) {
+	if (disconnectedPlayers.get(player.name)) {
 		extended.SetupExportsForPlayer(player);
 		player.fadeScreen(true, 5000);
 		player.freeze(true);
@@ -29,9 +29,8 @@ export function playerFirstJoin(player) {
 
 export function playerDisconnect(player) {
 	// Remove from dimension if they're in one.
-	if (player.currentDimension !== undefined) {
+	if (player.currentDimension)
 		player.currentDimension.Remove(player);
-	}
 
 	// Disconnect the player for 25 seconds.
 	disconnectedPlayers.set(player.name, Date.now() + 120000);
@@ -49,9 +48,9 @@ export function checkDisconnects() {
 
 export function respawnPlayer(target) {
 	target.showSubtitle('~r~You have died; you will be respawned shortly.', 5000);
-	var randomPosition = extended.RandomPosAround(spawnLocation, 50);
+	const randomPosition = extended.RandomPosAround(spawnLocation, 50);
     
-	var skin = target.model;
+	const skin = target.model;
 	target.fadeScreen(true, 3000);
     
 	setTimeout(() => {
@@ -63,8 +62,8 @@ export function respawnPlayer(target) {
 }
 
 function SpawnPlayer(player) {
-	var randomPosition = extended.RandomPosAround(spawnLocation, 30);
-	var randomModel = Math.floor(Math.random() * skinList.length);
+	const randomPosition = extended.RandomPosAround(spawnLocation, 30);
+	const randomModel = Math.floor(Math.random() * skinList.length);
 	player.model = alt.hash(skinList[randomModel]);
     
 	// Wait to set player health.
