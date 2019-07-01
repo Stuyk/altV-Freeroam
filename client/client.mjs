@@ -23,11 +23,6 @@ alt.onServer('updateModel', (model) => {
   native.requestModel(native.getHashKey(model));
 });
 
-alt.onServer('revivePlayer', (player) => {
-  native.resurrectPed(player.scriptID);
-  native.clearPedTasksImmediately(player.scriptID);
-});
-
 alt.onServer('suicidePlayer', (player) => {
   native.giveWeaponToPed(player.scriptID, 453432689, 1, false, true);
 
@@ -49,8 +44,6 @@ alt.onServer('suicidePlayer', (player) => {
     alt.emitServer('killSelf');
   }, 1250);
 });
-
-var lastTargetHealth = 0;
 
 alt.on('update', () => {
   alt.Player.all.forEach((player) => {
@@ -91,7 +84,6 @@ alt.on('update', () => {
     // Scaling Math
     extended.drawText(player.name, result[1], y, scale, 4, 255, 255, 255, 255, true, false);
     native.drawRect(result[1], y + 0.05, pHealth, 0.01, 255, 0, 0, 100);
-
   });
 });
 

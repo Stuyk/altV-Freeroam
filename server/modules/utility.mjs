@@ -12,12 +12,6 @@ export function loadModelsForPlayer(player) {
     });
 }
 
-export function revivePlayer(player) {
-    alt.Player.all.forEach((target) => {
-        alt.emitClient(target, 'revivePlayer', player);
-    });
-}
-
 export function suicidePlayer(player) {
     alt.Player.all.forEach((target) => {
         alt.emitClient(target, 'suicidePlayer', player);
