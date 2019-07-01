@@ -2,6 +2,10 @@
 
 ---
 
+Remember to 🌟 this Github if you 💖 it.
+
+---
+
 ### Requires:
 * [altV-Extended](https://github.com/team-stuyk-alt-v/altV-Extended)
 * [altV-Chat-Extended](https://github.com/team-stuyk-alt-v/altV-Chat-Extended)
