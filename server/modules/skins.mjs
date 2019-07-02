@@ -262,7 +262,6 @@ export const skinList = [
 	'mp_m_g_vagfun_01',
 	'mp_m_marston_01',
 	'mp_m_meth_01',
-	'mp_m_niko_01',
 	'mp_m_securoguard_01',
 	'mp_m_shopkeep_01',
 	'mp_m_waremech_01',

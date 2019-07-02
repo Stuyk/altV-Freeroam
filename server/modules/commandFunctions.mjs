@@ -37,9 +37,14 @@ export function spawnVehicle(player, arg) {
 	if (!arg[0])
 		return player.sendMessage('{FF0000}Vehicle type is not valid.');
 
-	if (!player.personalVehicle)
-		player.personalVehicle.destroy();
-    
+	if (player.personalVehicle !== undefined) {
+		try {
+			player.personalVehicle.destroy();
+		} catch (err) {
+			player.personalVehicle = undefined;
+		}
+	}
+		
 	const positionNear = extended.RandomPosAround(player.pos, 10);
 
 	try {
