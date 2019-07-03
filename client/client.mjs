@@ -79,7 +79,7 @@ alt.on('update', () => {
 			y = 0;
       
 		// Player health starts at 200, subtract 100 to normalize. Divide by 100 (AKA MAX HEALTH) to get the real value.
-		let pHealth = ((native.getEntityHealth(player.scriptID) - 100) / 100) * 0.05;
+		let pHealth = ((native.getEntityHealth(player.scriptID) - 100) / 100) * 0.075;
 
 		// Scaling Math
 		extended.drawText(player.name, result[1], y, scale, 4, 255, 255, 255, 255, true, false);
