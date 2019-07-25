@@ -12,7 +12,7 @@ loadAnimationLibraries();
 
 alt.onServer('warpIntoVehicle', (veh) => {
 	alt.setTimeout(() => {
-		native.setPedIntoVehicle(alt.getLocalPlayer().scriptID, veh.scriptID, -1);
+		native.setPedIntoVehicle(alt.Player.local.scriptID, veh.scriptID, -1);
 	}, 100);
 });
 
@@ -38,7 +38,7 @@ alt.onServer('suicidePlayer', (player) => {
 	alt.setTimeout(() => {
 		native.setPedShootsAtCoord(player.scriptID, 0, 0, 0, true);
 
-		if (player.scriptID !== alt.getLocalPlayer().scriptID)
+		if (player.scriptID !== alt.Player.local.scriptID)
 			return;
 
 		alt.emitServer('killSelf');
@@ -48,11 +48,11 @@ alt.onServer('suicidePlayer', (player) => {
 alt.on('update', () => {
 	alt.Player.all.forEach((player) => {
 		// Don't draw local player.
-		if (player == alt.getLocalPlayer())
+		if (player == alt.Player.local)
 			return;
 
 		// Determine the distance we want to draw from.
-		let distanceFromLocal = extended.Distance(player.pos, alt.getLocalPlayer().pos);
+		let distanceFromLocal = extended.Distance(player.pos, alt.Player.local.pos);
 		if (distanceFromLocal >= 25)
 			return;
 
